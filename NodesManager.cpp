@@ -55,7 +55,7 @@ FileNodesManager::FileNodesManager() : nodes_file_("tmp_nodes_file",
 
 std::size_t FileNodesManager::AddNode(std::size_t len, int link) {
   nodes_file_.seekg(0, std::ios_base::end);
-
+  return 0;
 }
 
 void FileNodesManager::WriteNode(const Node &node) {
@@ -68,5 +68,39 @@ void FileNodesManager::WriteNode(const Node &node) {
   for (; i < alphabet_size; ++i) {
     nodes_file_ << "a:0";
   }
+}
+const NodesManager::Node &FileNodesManager::GetNode(std::size_t index) const {
+  return *(new Node());
+}
+
+std::size_t FileNodesManager::AddNode(const NodesManager::Node &node) {
+  return 0;
+}
+
+std::size_t FileNodesManager::CopyNode(std::size_t index) {
+  return 0;
+}
+
+std::size_t FileNodesManager::GetLen(std::size_t index) const {
+  return 0;
+}
+
+void FileNodesManager::SetLen(std::size_t index, std::size_t len) {
+
+}
+int FileNodesManager::GetLink(std::size_t index) const {
+  return 0;
+}
+void FileNodesManager::SetLink(std::size_t index, int link) {
+
+}
+std::size_t FileNodesManager::GetEdge(std::size_t index, char c) const {
+  return 0;
+}
+void FileNodesManager::SetEdge(std::size_t index, char c, std::size_t to) {
+
+}
+bool FileNodesManager::HasEdge(std::size_t index, char c) const {
+  return false;
 };
 

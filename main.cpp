@@ -1,24 +1,58 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include "Automaton/SuffixAutomaton.h"
 
-int main() {
+using std::chrono::duration;
+using std::chrono::duration_cast;
 
-  std::ifstream input_file("../Texts/book-war-and-peace.txt");
+int main() {
+  std::ifstream input_file("../Texts/WarAndPeace.txt");
   //std::ifstream input_file("../Texts/Human_genome.fa");
 
-  SuffixAutomaton
-      suffix_automaton(input_file, std::make_shared<FileNodesManager>());
+  auto begin = std::chrono::high_resolution_clock::now();
+  SuffixAutomaton suffix_automaton(input_file);
+  auto end = std::chrono::high_resolution_clock::now();
 
-  std::cout << "Automaton ready!" << std::endl;
+  input_file.close();
 
-  /*std::string pattern =
-      "CCCAAAACAGACAGGTCTTACGTTAACCTTCACCTTAAAAAGGATATTGCCTTTTTTCCTTCTGCTTCAC";*/
-  std::string pattern = "sex";
-  std::cout << suffix_automaton.FindFirstOccurrence(pattern) << std::endl;
+  std::cout.precision(4);
+  std::cout << "Reading file and building suffix automaton done in "
+            << std::fixed
+            << duration_cast<std::chrono::seconds>(end - begin).count()
+            << std::setprecision(5)
+            << " seconds" << std::endl;
 
-  //std::cout << buffer.str().substr(274780 - 10, 20) << std::endl;
+  std::string pattern;
+
+  while (std::getline(std::cin, pattern)) {
+    begin = std::chrono::high_resolution_clock::now();
+
+    auto first_occurrence =
+        suffix_automaton.FindFirstOccurrence(pattern);
+
+    for (size_t i = 0; i < 999; ++i) {
+      first_occurrence =
+          suffix_automaton.FindFirstOccurrence(pattern);
+    }
+
+    end = std::chrono::high_resolution_clock::now();
+
+    if (first_occurrence != -1) {
+      std::cout << "Found occurrence at " << first_occurrence
+                << " in "
+                << duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                    / 1000
+                << " nanoseconds" << std::endl;
+    } else {
+      std::cout << "There is no patter in text. Done in "
+                << duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                    / 1000
+                << " nanoseconds" << std::endl;
+    }
+  }
 
   return 0;
 }
